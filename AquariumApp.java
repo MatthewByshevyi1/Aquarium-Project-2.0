@@ -6,7 +6,7 @@ public class AquariumApp {
 
         SeaCreature[] tank = new SeaCreature[8];
 
-        // Two starter creatures.
+        /* Two starter creatures.
         try {
             tank[0] = new Fish("Nemo", 4, 3, 1, "><>");
         } catch (InvalidCreatureException e) {
@@ -18,7 +18,7 @@ public class AquariumApp {
             System.out.println(e.getMessage());
         }
         try {
-            tank[2] = new Squid("Gerald",15,10,1,"<☲>≼≼≼≼");
+            tank[2] = new Squid("Albert",15,10,1,"<☲>≼≼≼≼");
         } catch (InvalidCreatureException e) {
             System.out.println(e.getMessage());
         }
@@ -32,7 +32,7 @@ public class AquariumApp {
         } catch (InvalidCreatureException e) {
             System.out.println(e.getMessage());
         }
-
+        */
         // =====================================================
         // STUDENT TODO
         // =====================================================
