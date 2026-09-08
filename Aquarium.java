@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class Aquarium {
 
     public static final int TANK_WIDTH = 48;

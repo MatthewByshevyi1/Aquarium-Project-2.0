@@ -1,93 +1,12 @@
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.Scanner;
-import java.nio.charset.StandardCharsets;
 
 public class AquariumApp {
 
     public static void main(String[] args) {
 
-        SeaCreature[] tank = new SeaCreature[8];
-        
-        int num = 0;
-        try (BufferedReader reader = new BufferedReader(
-                new FileReader("SeaCreatures.txt", StandardCharsets.UTF_8))) {
+        Reader reader = new Reader("SeaCreatures.txt");
+        SeaCreature[] tank = reader.readIn("SeaCreatures.txt");
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(", ");
-                try {
-                    if (parts.length != 6) {
-                        throw new InvalidCreatureException("Not enough information to create a SeaCreature.");
-                    } else {
-                        String type = parts[0].trim();
-                        String name = parts[1].trim();
-                        int position = Integer.parseInt(parts[2].trim());
-                        int speed = Integer.parseInt(parts[3].trim());
-                        int direction = Integer.parseInt(parts[4].trim());
-                        String appearance = parts[5].trim();
-
-                        SeaCreature creature = null;
-
-                        switch (type) {
-                            case "Fish":
-                                creature = new Fish(name, position, speed, direction, appearance);
-                                break;
-                            case "Squid":
-                                creature = new Squid(name, position, speed, direction, appearance);
-                                break;
-                            case "Crab":
-                                creature = new Crab(name, position, speed, direction, appearance);
-                                break;
-                            default:
-                                throw new InvalidCreatureException("Unknown SeaCreature type: " + type);
-                        }
-
-                        if (num < tank.length) {
-                            tank[num] = creature;
-                            num++;
-                        } else {
-                            System.out.println("Tank is full. Cannot add more creatures.");
-                            break;
-                        }
-                    }
-                } catch (InvalidCreatureException e) {
-                    System.out.println(e.getMessage());
-                }
-                
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
-        }
-
-        /* Two starter creatures.
-        try {
-            tank[0] = new Fish("Nemo", 4, 3, 1, "><>");
-        } catch (InvalidCreatureException e) {
-            System.out.println(e.getMessage());
-        }
-        try {
-            tank[1] = new Fish("Dory", 30, 2, -1, "><((('>");
-        } catch (InvalidCreatureException e) {
-            System.out.println(e.getMessage());
-        }
-        try {
-            tank[2] = new Squid("Albert",15,10,1,"<☲>≼≼≼≼");
-        } catch (InvalidCreatureException e) {
-            System.out.println(e.getMessage());
-        }
-        try {
-            tank[3] = new Crab("Eduardio",10,4,-1,"ʚ„[•ᴗ•]„ɞ");
-        } catch (InvalidCreatureException e) {
-            System.out.println(e.getMessage());
-        }
-        try {
-            tank[4] = new Fish("Gregory", 20, 2, -1, "><>");
-        } catch (InvalidCreatureException e) {
-            System.out.println(e.getMessage());
-        }
-        */
         // =====================================================
         // STUDENT TODO
         // =====================================================
@@ -132,16 +51,38 @@ public class AquariumApp {
                     break;
 
                 case "4":
+                    int turns = 0;
+                    while (!(turns >= 1 && turns <= 100)) {
+                        System.out.println("\nHow many turns do you want to advance? (1-100)");
+                        String turnsInput = input.nextLine().trim();
+                        try {
+                            turns = Integer.parseInt(turnsInput);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a number.");
+                            continue;
+                        }
+                        if (turns < 1 || turns > 100) {
+                            System.out.println("Please enter a number between 1 and 100.");
+                        }
+                    }
+                    for (int i = 0; i < turns; i++) {
+                        aquarium.advanceTurn();
+                        aquarium.display();
+                        stop(1000);
+                    }
+                    break;
+                
+                case "5":
                     aquarium.listCreatureDetails();
                     break;
 
-                case "5":
+                case "6":
                     running = false;
                     System.out.println("Aquarium closed. Goodbye!");
                     break;
 
                 default:
-                    System.out.println("Please choose 1, 2, 3, or 4.");
+                    System.out.println("Please choose 1, 2, 3, 4, or 5.");
             }
         }
 
@@ -153,8 +94,9 @@ public class AquariumApp {
         System.out.println("1. View Aquarium");
         System.out.println("2. Advance One Turn");
         System.out.println("3. Advance 10 turns");
-        System.out.println("4. View Creature Details");
-        System.out.println("5. Quit");
+        System.out.println("4. Advance for x turns");
+        System.out.println("5. View Creature Details");
+        System.out.println("6. Quit");
     }
 
     public static void stop(int milliseconds) {
